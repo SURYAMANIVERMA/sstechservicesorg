@@ -24,6 +24,14 @@ export const NAV = [
   { to: "/contact", label: "Contact" },
 ];
 
+export const TICKET_STATUS_META: Record<string, { label: string; color: string; step: number }> = {
+  new:         { label: "New",          color: "bg-blue-500",    step: 1 },
+  assigned:    { label: "Assigned",     color: "bg-purple-500",  step: 2 },
+  in_progress: { label: "In Progress",  color: "bg-amber-500",   step: 3 },
+  resolved:    { label: "Resolved",     color: "bg-emerald-500", step: 4 },
+  closed:      { label: "Closed",       color: "bg-slate-500",   step: 4 },
+};
+
 export const IT_SERVICES = [
   { title: "Network Installation", desc: "End-to-end LAN/WAN design, deployment & optimization for enterprise networks.", icon: "Network" },
   { title: "Structured Cabling", desc: "Cat6/Cat6A, fiber backbones, certified termination & dressing for data centers.", icon: "Cable" },

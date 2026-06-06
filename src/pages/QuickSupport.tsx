@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import PageHero from "@/components/PageHero";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,26 +16,43 @@ import supportImg from "@/assets/quick-support.jpg";
 export default function QuickSupport() {
   const [form, setForm] = useState({ name: "", phone: "", issue: QUICK_SUPPORT_ISSUES[0], detail: "" });
   const [sent, setSent] = useState(false);
+  const [ticketRef, setTicketRef] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.name || !form.phone) {
       toast({ title: "Please enter your name and phone", variant: "destructive" });
       return;
     }
-    // 🔔 Quick reply notification simulation
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("support_tickets")
+      .insert({
+        customer_name: form.name.trim(),
+        customer_phone: form.phone.trim(),
+        issue_type: form.issue,
+        detail: form.detail.trim() || null,
+      })
+      .select("public_ref")
+      .single();
+    setLoading(false);
+    if (error || !data) {
+      toast({ title: "Could not create ticket", description: error?.message, variant: "destructive" });
+      return;
+    }
+    setTicketRef(data.public_ref);
+    setSent(true);
     toast({
-      title: "🔔 Request received — Engineer notified!",
-      description: `Hi ${form.name}, our Lucknow team will WhatsApp/call you within 5 minutes on ${form.phone}.`,
+      title: "🔔 Ticket created — " + data.public_ref,
+      description: `Hi ${form.name}, our Lucknow team will WhatsApp/call you within 5 minutes.`,
     });
-    // Auto-acknowledgement reply after 3 seconds
     setTimeout(() => {
       toast({
         title: "💬 Quick Reply from SS TECH Support",
-        description: `"Hello ${form.name}, namaste! We've assigned engineer Rohit to your "${form.issue}" request. ETA: 60 mins."`,
+        description: `"Hello ${form.name}, namaste! Your "${form.issue}" request is in our queue. Track it any time using your ticket ID."`,
       });
-    }, 3000);
-    setSent(true);
+    }, 2500);
     setForm({ name: "", phone: "", issue: QUICK_SUPPORT_ISSUES[0], detail: "" });
   }
 
@@ -166,10 +185,21 @@ export default function QuickSupport() {
                 </select>
               </div>
               <div><Label>Describe (optional)</Label><Textarea rows={3} value={form.detail} onChange={e => setForm({ ...form, detail: e.target.value })} placeholder="e.g. Laptop is showing blue screen since morning" /></div>
-              <Button type="submit" size="lg" className="bg-gradient-accent border-0 shadow-accent">
-                <BellRing className="h-4 w-4 mr-2" /> Send & notify engineer
+              <Button type="submit" size="lg" disabled={loading} className="bg-gradient-accent border-0 shadow-accent">
+                <BellRing className="h-4 w-4 mr-2" /> {loading ? "Creating ticket…" : "Send & notify engineer"}
               </Button>
-              {sent && <p className="text-xs text-emerald-600 text-center">✅ Ticket created — check the notification on the top right.</p>}
+              {sent && ticketRef && (
+                <div className="rounded-lg border-2 border-emerald-500/50 bg-emerald-50 dark:bg-emerald-950/30 p-4 text-center">
+                  <div className="text-xs text-emerald-700 dark:text-emerald-300 font-semibold">YOUR TICKET ID</div>
+                  <div className="font-display text-2xl font-bold text-emerald-700 dark:text-emerald-300 my-1">{ticketRef}</div>
+                  <Link to={`/track/${ticketRef}`} className="text-sm text-emerald-700 dark:text-emerald-300 underline">
+                    Track status live →
+                  </Link>
+                </div>
+              )}
+              <div className="text-xs text-center text-muted-foreground">
+                Have a ticket already? <Link to="/track" className="text-accent font-semibold">Track it here</Link>
+              </div>
             </form>
           </Card>
         </div>

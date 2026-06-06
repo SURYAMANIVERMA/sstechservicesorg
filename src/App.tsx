@@ -15,6 +15,9 @@ import Placement from "./pages/Placement";
 import Projects from "./pages/Projects";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
+import TrackTicket from "./pages/TrackTicket";
+import AdminAuth from "./pages/AdminAuth";
+import AdminTickets from "./pages/AdminTickets";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +41,10 @@ const App = () => (
             <Route path="/projects" element={<Projects />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/track" element={<TrackTicket />} />
+            <Route path="/track/:ref" element={<TrackTicket />} />
+            <Route path="/admin/auth" element={<AdminAuth />} />
+            <Route path="/admin/tickets" element={<AdminTickets />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
