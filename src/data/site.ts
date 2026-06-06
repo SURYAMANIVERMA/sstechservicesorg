@@ -121,3 +121,61 @@ export const PROJECTS = [
   { title: "Campus-wide CCTV & Monitoring", client: "Educational Group", tech: "IP CCTV • Zabbix", desc: "300+ camera deployment with centralized NOC dashboard." },
   { title: "Cyber Range Lab", client: "Internal Academy", tech: "Proxmox • Kali • DVWA", desc: "Isolated red/blue team lab supporting 200 concurrent trainees." },
 ];
+
+export const QUICK_SUPPORT_PLANS = [
+  {
+    name: "On-Call Visit (Lucknow)",
+    price: "₹499",
+    unit: "/ visit",
+    eta: "Engineer at your doorstep within 60–90 mins inside Lucknow city.",
+    features: [
+      "PC / Laptop / Printer setup & repair",
+      "WiFi router & network troubleshooting",
+      "Virus removal & Windows reinstall",
+      "CCTV / DVR on-site fix",
+      "Free re-visit within 7 days for same issue",
+    ],
+    highlight: false,
+  },
+  {
+    name: "Remote Support",
+    price: "₹199",
+    unit: "/ session",
+    eta: "Connect in under 5 minutes via AnyDesk / TeamViewer. Pay only if resolved.",
+    features: [
+      "Software installation & activation",
+      "Email, Outlook & MS Office issues",
+      "Tally / GST / Busy software help",
+      "Browser, antivirus & performance tuning",
+      "Quick chat reply 9 AM – 11 PM",
+    ],
+    highlight: true,
+  },
+  {
+    name: "Annual AMC (Business)",
+    price: "₹4,999",
+    unit: "/ year per device",
+    eta: "Unlimited remote + 4 free on-site visits per year for SMBs in Lucknow.",
+    features: [
+      "Priority response (under 15 mins)",
+      "Patch, backup & security monitoring",
+      "Dedicated WhatsApp support line",
+      "Quarterly health check-up report",
+      "Discounted hardware procurement",
+    ],
+    highlight: false,
+  },
+];
+
+export const QUICK_SUPPORT_ISSUES = [
+  "Slow / hanging computer",
+  "WiFi & internet not working",
+  "Printer not printing",
+  "Email setup (Gmail / Outlook)",
+  "Windows reinstallation",
+  "Virus / ransomware removal",
+  "CCTV camera offline",
+  "Tally / Busy / GST software",
+  "Data recovery",
+  "Office 365 / Zoom setup",
+];
