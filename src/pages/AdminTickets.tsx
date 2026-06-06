@@ -13,6 +13,7 @@ import { TICKET_STATUS_META } from "@/data/site";
 import { LogOut, RefreshCw, ShieldCheck, Wrench, Phone, Clock, Search } from "lucide-react";
 
 type Role = "admin" | "engineer";
+type TicketStatus = "new" | "assigned" | "in_progress" | "resolved" | "closed";
 type Ticket = {
   id: string;
   public_ref: string;
@@ -20,7 +21,7 @@ type Ticket = {
   customer_phone: string;
   issue_type: string;
   detail: string | null;
-  status: keyof typeof TICKET_STATUS_META;
+  status: TicketStatus;
   assigned_to: string | null;
   engineer_name: string | null;
   admin_notes: string | null;
@@ -29,7 +30,7 @@ type Ticket = {
 };
 type Profile = { id: string; display_name: string | null; email: string | null };
 
-const STATUSES: (keyof typeof TICKET_STATUS_META)[] = ["new", "assigned", "in_progress", "resolved", "closed"];
+const STATUSES: TicketStatus[] = ["new", "assigned", "in_progress", "resolved", "closed"];
 
 export default function AdminTickets() {
   const nav = useNavigate();
@@ -116,7 +117,7 @@ export default function AdminTickets() {
 
   async function updateTicket(t: Ticket, patch: Partial<Ticket>) {
     const prev = t.status;
-    const { error } = await supabase.from("support_tickets").update(patch).eq("id", t.id);
+    const { error } = await supabase.from("support_tickets").update(patch as any).eq("id", t.id);
     if (error) return toast({ title: "Update failed", description: error.message, variant: "destructive" });
     // Log status change
     if (patch.status && patch.status !== prev) {
@@ -124,8 +125,8 @@ export default function AdminTickets() {
         ticket_id: t.id,
         author_id: userId,
         author_name: myName,
-        from_status: prev,
-        to_status: patch.status,
+        from_status: prev as TicketStatus,
+        to_status: patch.status as TicketStatus,
         note: note || null,
       });
       setNote("");
