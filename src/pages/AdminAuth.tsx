@@ -39,7 +39,7 @@ export default function AdminAuth() {
     });
     setLoading(false);
     if (error) return toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
-    toast({ title: "Account created", description: "You can sign in now. First account = Admin." });
+    toast({ title: "Account created", description: "First account becomes Admin. Other accounts have NO access until an Admin grants a role." });
   }
 
   return (
@@ -65,7 +65,7 @@ export default function AdminAuth() {
               <div><Label>Email</Label><Input type="email" required value={email} onChange={e => setEmail(e.target.value)} /></div>
               <div><Label>Password (min 6)</Label><Input type="password" required minLength={6} value={password} onChange={e => setPassword(e.target.value)} /></div>
               <Button disabled={loading} className="bg-gradient-accent border-0 shadow-accent">{loading ? "Creating…" : "Create account"}</Button>
-              <p className="text-xs text-muted-foreground text-center">The first signup becomes Admin. All later signups become Engineer.</p>
+              <p className="text-xs text-muted-foreground text-center">Only the first signup becomes Admin. Later signups receive no access until an Admin assigns them an Engineer role from the dashboard.</p>
             </form>
           </TabsContent>
         </Tabs>
