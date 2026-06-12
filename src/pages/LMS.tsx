@@ -68,6 +68,16 @@ if (role === "Trainer" && profile?.role !== "trainer") {
   await supabase.auth.signOut();
   return;
 }
+        
+if (role === "Student" && profile?.role !== "student") {
+  toast({
+    title: "Access Denied",
+    description: "Student account required",
+  });
+
+  await supabase.auth.signOut();
+  return;
+}
 
 toast({
   title: "Login Success",
