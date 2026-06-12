@@ -9,10 +9,12 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "@/hooks/use-toast";
 import { BookOpen, Award, FileText, Video, ClipboardCheck, BarChart3, Users, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm({ role }: { role: string }) {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+  const navigate = useNavigate();
   return (
     <form
       onSubmit={async e => {
@@ -40,7 +42,11 @@ function LoginForm({ role }: { role: string }) {
     description: `Welcome ${role}`,
   });
 
-  console.log(data);
+  if (role === "Admin") {
+  navigate("/admin/tickets");
+} else {
+  navigate("/dashboard");
+}
 }}
       className="grid gap-4"
     >
