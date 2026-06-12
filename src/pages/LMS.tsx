@@ -37,14 +37,50 @@ function LoginForm({ role }: { role: string }) {
     return;
   }
 
-  toast({
-    title: "Login Success",
-    description: `Welcome ${role}`,
-  });
+  const { data: profile, error: profileError } = await supabase
+  .from("profiles")
+  .select("role")
+  .eq("id", data.user?.id)
+  .single();
 
-  if (role === "Admin") {
+if (profileError) {
+  toast({
+    title: "Profile Error",
+    description: profileError.message,
+  });
+  return;
+}
+
+if (role === "Admin" && profile?.role !== "admin") {
+  toast({
+    title: "Access Denied",
+    description: "You are not admin",
+  });
+  await supabase.auth.signOut();
+  return;
+}
+
+if (role === "Trainer" && profile?.role !== "trainer") {
+  toast({
+    title: "Access Denied",
+    description: "Trainer account required",
+  });
+  await supabase.auth.signOut();
+  return;
+}
+
+toast({
+  title: "Login Success",
+  description: `Welcome ${role}`,
+});
+
+if (profile?.role === "admin") {
   navigate("/admin/tickets");
-} else {
+}
+else if (profile?.role === "trainer") {
+  navigate("/trainer-dashboard");
+}
+else {
   navigate("/dashboard");
 }
 }}
