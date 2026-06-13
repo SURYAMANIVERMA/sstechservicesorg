@@ -28,7 +28,10 @@ function LoginForm({ role }: { role: string }) {
     email: email,
     password: pw,
   });
-
+        
+console.log("Auth user:", data.user);
+console.log("Login error:", error);
+        
   if (error) {
     toast({
       title: "Login Failed",
@@ -42,6 +45,11 @@ function LoginForm({ role }: { role: string }) {
   .select("role")
   .eq("id", data.user?.id)
   .single();
+        
+console.log("Profile:", profile);
+console.log("Profile role:", profile?.role);
+console.log("Profile error:", profileError);
+console.log("Selected role:", role);      
 
 if (profileError) {
   toast({
