@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -24,9 +26,31 @@ import TrainerDashboard from "./pages/TrainerDashboard";
 
 const queryClient = new QueryClient();
 
+function AuthHandler() {
+  useEffect(() => {
+    const hash = window.location.hash;
+
+    // Supabase password reset / magic link callback
+    if (hash.includes("access_token")) {
+      console.log("Supabase auth callback detected");
+
+      // Let Supabase read session
+      supabase.auth.getSession().then(({ data }) => {
+        console.log("Session:", data.session);
+
+        // Redirect to LMS page after auth
+        window.location.replace("/#/lms");
+      });
+    }
+  }, []);
+
+  return null;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <AuthHandler />
       <Toaster />
       <Sonner />
       <HashRouter>
