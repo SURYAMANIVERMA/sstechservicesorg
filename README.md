@@ -1,3 +1,3 @@
-# Welcome to your Lovable project
+# Welcome to your SS TECH SERVICES
 
 TODO: Document your project here
